@@ -316,8 +316,7 @@
                 // }).catch(()=>{
                 //     window.location='/admin';
                 // });
-            },
-            
+            },  
         },
 
         created(){
