@@ -3,11 +3,11 @@
         <section class="jumbotron text-center">
             <div class="container">
                 <h1>CAMISETAS PARA MAYORISTAS</h1>
-                <p class="lead text-muted">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don’t simply skip over it entirely.</p>
-                <p>
+                <p class="lead text-muted">En nuestra pagina display, podras encontrar la variedad de camisetas que manejamos para tu negocio.</p>
+                <!-- <p>
                     <a href="#" class="btn btn-primary my-2">Main call to action</a>
                     <a href="#" class="btn btn-secondary my-2">Secondary action</a>
-                </p>
+                </p> -->
             </div>
         </section>
         <!-- <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light">
@@ -19,19 +19,27 @@
             <div class="product-device shadow-sm d-none d-md-block"></div>
             <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
         </div> -->
+
         <div class="album py-5 bg-light">
             <div class="container">
                 <div class="row">
                     <div v-for="prod in productos" :key="prod.id" class="col-md-4">
                         <div class="card mb-4 shadow-sm">
-                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+                            <img :src="prod.imagen.imagen" class="img-thumbnail">
                             <div class="card-body">
                                 <p class="card-text">{{ prod.camiseta.name }}</p>
+                                <p class="card-text">{{ prod.color.colors }}</p>
                                 <p class="card-text">{{ prod.camiseta.description }}</p>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <div class="btn-group">
+                                    <!-- <div class="btn-group">
                                         <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
                                         <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                    </div> -->
+                                    <div v-if="prod.stock > 0">
+                                        <p style="color:blue;" class="card-text">{{ prod.stock }} en existencia</p>
+                                    </div>
+                                    <div v-else>
+                                        <p style="color:red;" class="card-text">Agotado</p>
                                     </div>
                                     <small class="text-muted">$ {{ prod.camiseta.price }} c/u </small>
                                 </div>
@@ -39,8 +47,6 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
 

@@ -25,11 +25,11 @@ class ImagenController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {        
         $img = new Imagen;
-        $this->validate($request,[
-            'imagen' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
-        ]);
+        // $this->validate($request,[
+        //     'imagen' => 'required|imagen|mimes:jpeg,png,jpg,gif,svg',
+        // ]);
         
 
         $image = request()->file('imagen');
@@ -38,9 +38,8 @@ class ImagenController extends Controller
         $image->move(public_path('/imagenes'), $imageName);
 
         
-        $img->image = 'imagenes'.$imageName;
+        $img->imagen = 'imagenes/'.$imageName;
         $img->save();
-        dd($request->all());
     }
 
     /**

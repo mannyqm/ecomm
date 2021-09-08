@@ -1,5 +1,6 @@
 <?php
 
+use GuzzleHttp\Promise\Create;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,5 +29,4 @@ Route::apiResource('/camisetas', App\Http\Controllers\CamisetaController::class)
 Route::apiResource('/colores', App\Http\Controllers\ColorController::class);
 Route::apiResource('/sexos', App\Http\Controllers\SexoController::class);
 Route::apiResource('/tallas', App\Http\Controllers\TallaController::class);
-Route::apiResource('/imagenes', App\Http\Controllers\ImagenController::class);
 

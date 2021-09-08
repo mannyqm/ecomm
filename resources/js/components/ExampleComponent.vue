@@ -19,7 +19,7 @@
 
                     <!-- Modal body -->
                     <div class="modal-body">
-                        <!-- <div class="my-4">
+                        <div class="my-4">
                             <label for="nombre">Nombre</label>
                             <div v-if="modificar === true">
                                 <input v-model="producto.nombre" type="text" class="form-control" id="nombre" placeholder="Nombre del Producto">
@@ -34,7 +34,7 @@
                                 <textarea v-model="producto.descripcion" type="box" class="form-control" id="descripcion" placeholder="Descripcion del Producto"></textarea>
                             </div>
                             <div v-else>
-                                <input v-model=" camiseta.description " type="text" class="form-control" id="nombre" placeholder="Nombre del Producto">
+                                <input v-model=" camiseta.description " type="text" class="form-control" id="nombre" placeholder="Descripcion del Producto">
                             </div>
                         </div>
                         <div class="my-4">
@@ -88,16 +88,16 @@
                         <div class="my-4">
                             <label for="stock">Stock</label>
                             <input v-model="producto.stock" type="number" class="form-control" id="stock" placeholder="Stock">
-                        </div> -->
-                        <form @submit.prevent="imageUpload" method="POST" enctype="multipart/form-data">
-                            <div class="form-group">
-                                <label for="imagen">Imagen del producto</label>
-                                <input type="file" @change="imageSelected" name="imagen" class="form-control-file" id="image" >
-                            </div>
-                        </form>
-                        <div v-if="imagenPreview">
-                            <img :src="imagenPreview" class="figure-img img-fluid rounded"  style="max-height:100px;">
                         </div>
+                        <form @submit.prevent="profileUpload" method="POST" enctype="multipart/form-data">
+                            <div class="custom-file">
+                                <label for="custom-file">Imagen del producto</label>
+                                <input type="file" @change="imageSelected" name="imagen" class="form-control-file" id="custom-file" >
+                            </div>
+                            <!-- <div v-if="imagenPreview">
+                                <img :src="imagenPreview" class="figure-img img-fluid rounded"  style="max-height:100px;">
+                            </div> -->
+                        </form>
                     </div>
 
                     <!-- Modal footer -->
@@ -113,7 +113,7 @@
             <thead class="thead-dark">
                 <tr>
                     <!-- <th scope="col">#</th> -->
-                    <th scopo="col">Foto</th>
+                    <th scope="col">Foto</th>
                     <th scope="col">Nombre</th>
                     <th scope="col">Descripcion</th>
                     <th scope="col">Color</th>
@@ -125,18 +125,17 @@
             </thead>
             <tbody>
                 <tr v-for="prod in productos" :key="prod.id">
-                    <!-- <th scope="row">{{ prod.id }}</th> -->
-                    <td>{{ prod.image }}</td>
-                    <td>{{ prod.camiseta.name }}</td>
-                    <td>{{ prod.camiseta.description }}</td>
-                    <td>{{ prod.color.colors }}</td>
-                    <td>{{ prod.sexo.sex }}</td>
-                    <td>{{ prod.talla.size }}</td>
-                    <td>{{ prod.stock }}</td>
-                    <td>
+                    <td><img :src="prod.imagen.imagen" class="figure-img img-fluid" width="200"/></td>
+                    <td style="vertical-align: middle;">{{ prod.camiseta.name }}</td>
+                    <td style="vertical-align: middle;">{{ prod.camiseta.description }}</td>
+                    <td style="vertical-align: middle;">{{ prod.color.colors }}</td>
+                    <td style="vertical-align: middle;">{{ prod.sexo.sex }}</td>
+                    <td style="vertical-align: middle;">{{ prod.talla.size }}</td>
+                    <td style="vertical-align: middle;">{{ prod.stock }}</td>
+                    <td style="vertical-align: middle;">
                         <button @click="modificar=true;  abrirModal(prod);" class="btn btn-warning">Editar</button>
                     </td>
-                    <td>
+                    <td style="vertical-align: middle;">
                         <button @click="eliminarProducto(prod.id)" class="btn btn-danger">Eliminar</button>
                     </td>
                 </tr>
@@ -163,6 +162,7 @@
                 sexos:[],
                 tallas:[],
                 camisetas:[],
+                imagenes:[],
 
                 producto: {
                     nombre:'',
@@ -214,7 +214,7 @@
                 this.tallas = res.data;
             },
             async listarImagenes(){
-                const res = await axios.get('/imagenes');
+                const res = await axios.get('/api/imagenes');
                 this.imagenes = res.data;
             },
 
@@ -229,13 +229,18 @@
                 if(this.modificar){     
                     const res = await axios.put('/productos/'+this.producto_id, this.editarProducto);
                 }else{
-                    // const res = await axios.post('/camisetas', this.camiseta);
-                    // const resCamisetas = await axios.get('/camisetas');
-                    // const index = resCamisetas.data.length;
-                    // this.editarProducto.camiseta_id = resCamisetas.data[index-1].id;
-                    // console.log(this.editarProducto);
-                    // const resProd = await axios.post('/productos', this.editarProducto);
                     this.imageUpload();
+                    const res = await axios.post('/camisetas', this.camiseta);
+                    const resImagen = await axios.get('/api/imagenes');
+                    const indexImagen = resImagen.data.length;
+                    this.editarProducto.imagen_id = resImagen.data[indexImagen-1].id;
+                    console.log(resImagen);
+                    console.log(this.editarProducto);
+                    const resCamisetas = await axios.get('/camisetas');
+                    const indexCamiseta = resCamisetas.data.length;
+                    this.editarProducto.camiseta_id = resCamisetas.data[indexCamiseta-1].id;
+                    console.log(this.editarProducto);
+                    const resProd = await axios.post('/productos', this.editarProducto);   
                 }
                 this.cerrarModal();
                 this.listarProductos();
@@ -310,12 +315,9 @@
             imageUpload(){
                 let data = new FormData;
                 data.append('imagen', this.imagen);
-                axios.post('/imagenes', data);
-                // .then(()=>{
-
-                // }).catch(()=>{
-                //     window.location='/admin';
-                // });
+                axios.post('/api/imagenes', data)
+                .then(()=>{})
+                .catch(()=>{});
             },  
         },
 
@@ -330,6 +332,10 @@
         display: list-item;
         opacity: 1;
         background: rgba(44, 38, 75, 0.849);
+    }
+    #cssTable td 
+    {
+        vertical-align: middle;
     }
 
 </style>

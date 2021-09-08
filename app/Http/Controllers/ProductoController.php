@@ -14,7 +14,7 @@ class ProductoController extends Controller
      */
     public function index()
     {
-        return Producto::with([ 'camiseta', 'talla', 'sexo', 'color' ]) -> get();
+        return Producto::with([ 'camiseta', 'talla', 'sexo', 'color', 'imagen' ]) -> get();
     }
 
     /**
@@ -25,7 +25,7 @@ class ProductoController extends Controller
      */
     public function store(Request $request)
     {
-        $producto = new Producto;
+        $producto = new Producto();
         $producto->create($request->all());
     }
 
